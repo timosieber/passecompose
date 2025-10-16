@@ -1,0 +1,23 @@
+# Node
+node_modules/
+
+# Build
+/dist
+
+# VS Code
+.vscode/
+
+# Mac/Windows
+.DS_Store
+Thumbs.db
+
+# Netlify
+.netlify/
+
+# Logs
+*.log
+
+# Env
+.env
+.env.local
+.env.*.local

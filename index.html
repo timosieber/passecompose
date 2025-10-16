@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Französisch – Passé Composé Trainer</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background:#f7f8fc;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    color:#222;
+  }
+  h1 {color:#3366cc;}
+  #card {
+    background:white;
+    padding:2rem;
+    border-radius:1rem;
+    box-shadow:0 0.5rem 1rem rgba(0,0,0,0.1);
+    text-align:center;
+    max-width:500px;
+  }
+  .mode-selector {
+    display:flex;
+    gap:1rem;
+    margin-bottom:1.5rem;
+  }
+  .mode-btn {
+    flex:1;
+    padding:0.75rem;
+    border:2px solid #3366cc;
+    background:white;
+    color:#3366cc;
+    cursor:pointer;
+    border-radius:0.5rem;
+    font-weight:bold;
+    transition:all 0.3s;
+  }
+  .mode-btn.active {
+    background:#3366cc;
+    color:white;
+  }
+  .mode-btn:hover {
+    transform:translateY(-2px);
+  }
+  input, select, button {
+    font-size:1rem;
+    padding:0.5rem;
+    margin-top:1rem;
+    width:100%;
+    border-radius:0.5rem;
+    border:1px solid #ccc;
+  }
+  .hidden {
+    display:none;
+  }
+  #result { margin-top:1rem; font-weight:bold; }
+  #correct {color:green;}
+  #wrong {color:red;}
+</style>
+</head>
+<body>
+  <h1>Passé Composé üben 🇫🇷</h1>
+  <div id="card">
+    <div class="mode-selector">
+      <button class="mode-btn active" data-mode="1">Modus 1: Verb</button>
+      <button class="mode-btn" data-mode="2">Modus 2: Satz</button>
+    </div>
+    
+    <div id="question"></div>
+    
+    <!-- Modus 1: Verb mit Personalform -->
+    <div id="mode1-inputs">
+      <input id="answer" type="text" placeholder="z. B. je suis allé(e)">
+    </div>
+    
+    <!-- Modus 2: Ganzer Satz -->
+    <div id="mode2-inputs" class="hidden">
+      <input id="sentence-answer" type="text" placeholder="Ganzen Satz auf Französisch eingeben">
+    </div>
+    
+    <button id="check">Überprüfen</button>
+    <div id="result"></div>
+  </div>
+
+<script>
+const verbs = [
+  // être-Verben
+  {inf:"aller", aux:"être", pc:"je suis allé(e)", de:"Ich bin gegangen", fr:"Je suis allé(e) au cinéma."},
+  {inf:"venir", aux:"être", pc:"je suis venu(e)", de:"Ich bin gekommen", fr:"Je suis venu(e) chez toi."},
+  {inf:"arriver", aux:"être", pc:"je suis arrivé(e)", de:"Ich bin angekommen", fr:"Je suis arrivé(e) à l'école."},
+  {inf:"partir", aux:"être", pc:"je suis parti(e)", de:"Ich bin weggegangen", fr:"Je suis parti(e) en vacances."},
+  {inf:"entrer", aux:"être", pc:"je suis entré(e)", de:"Ich bin eingetreten", fr:"Je suis entré(e) dans la maison."},
+  {inf:"sortir", aux:"être", pc:"je suis sorti(e)", de:"Ich bin ausgegangen", fr:"Je suis sorti(e) avec mes amis."},
+  {inf:"naître", aux:"être", pc:"je suis né(e)", de:"Ich bin geboren", fr:"Je suis né(e) en Suisse."},
+  {inf:"mourir", aux:"être", pc:"je suis mort(e)", de:"Ich bin gestorben", fr:"Je suis mort(e) de rire."},
+  {inf:"tomber", aux:"être", pc:"je suis tombé(e)", de:"Ich bin gefallen", fr:"Je suis tombé(e) par terre."},
+  {inf:"rester", aux:"être", pc:"je suis resté(e)", de:"Ich bin geblieben", fr:"Je suis resté(e) à la maison."},
+  // avoir-Verben (unregelmässige + -er)
+  {inf:"avoir", aux:"avoir", pc:"j'ai eu", de:"Ich habe gehabt", fr:"J'ai eu une bonne note."},
+  {inf:"être", aux:"avoir", pc:"j'ai été", de:"Ich bin gewesen", fr:"J'ai été malade hier."},
+  {inf:"faire", aux:"avoir", pc:"j'ai fait", de:"Ich habe gemacht", fr:"J'ai fait mes devoirs."},
+  {inf:"pouvoir", aux:"avoir", pc:"j'ai pu", de:"Ich habe gekonnt", fr:"J'ai pu venir à la fête."},
+  {inf:"vouloir", aux:"avoir", pc:"j'ai voulu", de:"Ich habe gewollt", fr:"J'ai voulu partir tôt."},
+  {inf:"savoir", aux:"avoir", pc:"j'ai su", de:"Ich habe gewusst", fr:"J'ai su la réponse."},
+  {inf:"voir", aux:"avoir", pc:"j'ai vu", de:"Ich habe gesehen", fr:"J'ai vu un film hier."},
+  {inf:"mettre", aux:"avoir", pc:"j'ai mis", de:"Ich habe gestellt/gelegt", fr:"J'ai mis mon manteau."},
+  {inf:"prendre", aux:"avoir", pc:"j'ai pris", de:"Ich habe genommen", fr:"J'ai pris le bus."},
+  {inf:"dire", aux:"avoir", pc:"j'ai dit", de:"Ich habe gesagt", fr:"J'ai dit la vérité."},
+  {inf:"finir", aux:"avoir", pc:"j'ai fini", de:"Ich habe beendet", fr:"J'ai fini mon travail."},
+  {inf:"trouver", aux:"avoir", pc:"j'ai trouvé", de:"Ich habe gefunden", fr:"J'ai trouvé mes clés."},
+  {inf:"écouter", aux:"avoir", pc:"j'ai écouté", de:"Ich habe zugehört", fr:"J'ai écouté de la musique."},
+  {inf:"jouer", aux:"avoir", pc:"j'ai joué", de:"Ich habe gespielt", fr:"J'ai joué au football."},
+  {inf:"regarder", aux:"avoir", pc:"j'ai regardé", de:"Ich habe geschaut", fr:"J'ai regardé la télé."},
+  {inf:"parler", aux:"avoir", pc:"j'ai parlé", de:"Ich habe gesprochen", fr:"J'ai parlé avec Marie."},
+  {inf:"aimer", aux:"avoir", pc:"j'ai aimé", de:"Ich habe gemocht", fr:"J'ai aimé ce livre."},
+  {inf:"chercher", aux:"avoir", pc:"j'ai cherché", de:"Ich habe gesucht", fr:"J'ai cherché mon portable."},
+  {inf:"manger", aux:"avoir", pc:"j'ai mangé", de:"Ich habe gegessen", fr:"J'ai mangé une pizza."},
+  {inf:"travailler", aux:"avoir", pc:"j'ai travaillé", de:"Ich habe gearbeitet", fr:"J'ai travaillé hier soir."},
+];
+
+let current = {};
+let currentMode = 1;
+
+// Mode-Wechsel
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = parseInt(btn.dataset.mode);
+    
+    if (currentMode === 1) {
+      document.getElementById('mode1-inputs').classList.remove('hidden');
+      document.getElementById('mode2-inputs').classList.add('hidden');
+    } else {
+      document.getElementById('mode1-inputs').classList.add('hidden');
+      document.getElementById('mode2-inputs').classList.remove('hidden');
+    }
+    
+    newQuestion();
+  });
+});
+
+function newQuestion() {
+  current = verbs[Math.floor(Math.random() * verbs.length)];
+  const questionDiv = document.getElementById('question');
+  
+  if (currentMode === 1) {
+    // Modus 1: Verb auf Französisch mit Personalform (je)
+    questionDiv.innerHTML = `<strong>Infinitiv:</strong> ${current.inf}<br><small>Bilde das Passé Composé mit "je"</small>`;
+    document.getElementById('answer').value = "";
+  } else {
+    // Modus 2: Deutscher Satz
+    questionDiv.innerHTML = `<strong>Übersetze:</strong><br>"${current.de}"`;
+    document.getElementById('sentence-answer').value = "";
+  }
+  
+  document.getElementById('result').innerText = "";
+}
+
+document.getElementById('check').addEventListener('click', () => {
+  const res = document.getElementById('result');
+  
+  if (currentMode === 1) {
+    // Modus 1: Verb-Modus - nur Passé Composé eingeben
+    const ans = document.getElementById('answer').value.trim().toLowerCase();
+    
+    if (!ans) {
+      res.innerHTML = "<span id='wrong'>Bitte eine Antwort eingeben!</span>";
+      return;
+    }
+    
+    if (ans === current.pc.toLowerCase()) {
+      res.innerHTML = "<span id='correct'>✅ Richtig!</span>";
+    } else {
+      res.innerHTML = `<span id='wrong'>❌ Falsch!</span><br>
+      Richtige Lösung: <b>${current.pc}</b>`;
+    }
+  } else {
+    // Modus 2: Satz-Modus
+    const ans = document.getElementById('sentence-answer').value.trim().toLowerCase();
+    
+    if (!ans) {
+      res.innerHTML = "<span id='wrong'>Bitte einen Satz eingeben!</span>";
+      return;
+    }
+    
+    // Normalisierte Antwort (ohne Großbuchstaben, Punkt akzeptieren)
+    const correctAnswer = current.fr.toLowerCase().replace(/\.$/, '');
+    const userAnswer = ans.replace(/\.$/, '');
+    
+    if (userAnswer === correctAnswer) {
+      res.innerHTML = "<span id='correct'>✅ Richtig!</span>";
+    } else {
+      res.innerHTML = `<span id='wrong'>❌ Falsch!</span><br>
+      Richtige Lösung: <b>${current.fr}</b>`;
+    }
+  }
+  
+  setTimeout(newQuestion, 3000);
+});
+
+newQuestion();
+</script>
+</body>
+</html>
