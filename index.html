@@ -114,42 +114,55 @@
 <script>
 const verbs = [
   // être-Verben
-  {inf:"aller", aux:"être", pc:"je suis allé(e)", de:"Ich bin gegangen", fr:"Je suis allé(e) au cinéma."},
-  {inf:"venir", aux:"être", pc:"je suis venu(e)", de:"Ich bin gekommen", fr:"Je suis venu(e) chez toi."},
-  {inf:"arriver", aux:"être", pc:"je suis arrivé(e)", de:"Ich bin angekommen", fr:"Je suis arrivé(e) à l'école."},
-  {inf:"partir", aux:"être", pc:"je suis parti(e)", de:"Ich bin weggegangen", fr:"Je suis parti(e) en vacances."},
-  {inf:"entrer", aux:"être", pc:"je suis entré(e)", de:"Ich bin eingetreten", fr:"Je suis entré(e) dans la maison."},
-  {inf:"sortir", aux:"être", pc:"je suis sorti(e)", de:"Ich bin ausgegangen", fr:"Je suis sorti(e) avec mes amis."},
-  {inf:"naître", aux:"être", pc:"je suis né(e)", de:"Ich bin geboren", fr:"Je suis né(e) en Suisse."},
-  {inf:"mourir", aux:"être", pc:"je suis mort(e)", de:"Ich bin gestorben", fr:"Je suis mort(e) de rire."},
-  {inf:"tomber", aux:"être", pc:"je suis tombé(e)", de:"Ich bin gefallen", fr:"Je suis tombé(e) par terre."},
-  {inf:"rester", aux:"être", pc:"je suis resté(e)", de:"Ich bin geblieben", fr:"Je suis resté(e) à la maison."},
+  {inf:"aller", aux:"être", pc:"je suis allé(e)", de:"Ich bin ins Kino gegangen.", fr:"Je suis allé(e) au cinéma."},
+  {inf:"venir", aux:"être", pc:"je suis venu(e)", de:"Ich bin zu dir gekommen.", fr:"Je suis venu(e) chez toi."},
+  {inf:"arriver", aux:"être", pc:"je suis arrivé(e)", de:"Ich bin in der Schule angekommen.", fr:"Je suis arrivé(e) à l'école."},
+  {inf:"partir", aux:"être", pc:"je suis parti(e)", de:"Ich bin in die Ferien gefahren.", fr:"Je suis parti(e) en vacances."},
+  {inf:"entrer", aux:"être", pc:"je suis entré(e)", de:"Ich bin ins Haus eingetreten.", fr:"Je suis entré(e) dans la maison."},
+  {inf:"sortir", aux:"être", pc:"je suis sorti(e)", de:"Ich bin mit meinen Freunden ausgegangen.", fr:"Je suis sorti(e) avec mes amis."},
+  {inf:"naître", aux:"être", pc:"je suis né(e)", de:"Ich bin in der Schweiz geboren.", fr:"Je suis né(e) en Suisse."},
+  {inf:"mourir", aux:"être", pc:"je suis mort(e)", de:"Ich bin vor Lachen gestorben.", fr:"Je suis mort(e) de rire."},
+  {inf:"tomber", aux:"être", pc:"je suis tombé(e)", de:"Ich bin auf den Boden gefallen.", fr:"Je suis tombé(e) par terre."},
+  {inf:"rester", aux:"être", pc:"je suis resté(e)", de:"Ich bin zu Hause geblieben.", fr:"Je suis resté(e) à la maison."},
   // avoir-Verben (unregelmässige + -er)
-  {inf:"avoir", aux:"avoir", pc:"j'ai eu", de:"Ich habe gehabt", fr:"J'ai eu une bonne note."},
-  {inf:"être", aux:"avoir", pc:"j'ai été", de:"Ich bin gewesen", fr:"J'ai été malade hier."},
-  {inf:"faire", aux:"avoir", pc:"j'ai fait", de:"Ich habe gemacht", fr:"J'ai fait mes devoirs."},
-  {inf:"pouvoir", aux:"avoir", pc:"j'ai pu", de:"Ich habe gekonnt", fr:"J'ai pu venir à la fête."},
-  {inf:"vouloir", aux:"avoir", pc:"j'ai voulu", de:"Ich habe gewollt", fr:"J'ai voulu partir tôt."},
-  {inf:"savoir", aux:"avoir", pc:"j'ai su", de:"Ich habe gewusst", fr:"J'ai su la réponse."},
-  {inf:"voir", aux:"avoir", pc:"j'ai vu", de:"Ich habe gesehen", fr:"J'ai vu un film hier."},
-  {inf:"mettre", aux:"avoir", pc:"j'ai mis", de:"Ich habe gestellt/gelegt", fr:"J'ai mis mon manteau."},
-  {inf:"prendre", aux:"avoir", pc:"j'ai pris", de:"Ich habe genommen", fr:"J'ai pris le bus."},
-  {inf:"dire", aux:"avoir", pc:"j'ai dit", de:"Ich habe gesagt", fr:"J'ai dit la vérité."},
-  {inf:"finir", aux:"avoir", pc:"j'ai fini", de:"Ich habe beendet", fr:"J'ai fini mon travail."},
-  {inf:"trouver", aux:"avoir", pc:"j'ai trouvé", de:"Ich habe gefunden", fr:"J'ai trouvé mes clés."},
-  {inf:"écouter", aux:"avoir", pc:"j'ai écouté", de:"Ich habe zugehört", fr:"J'ai écouté de la musique."},
-  {inf:"jouer", aux:"avoir", pc:"j'ai joué", de:"Ich habe gespielt", fr:"J'ai joué au football."},
-  {inf:"regarder", aux:"avoir", pc:"j'ai regardé", de:"Ich habe geschaut", fr:"J'ai regardé la télé."},
-  {inf:"parler", aux:"avoir", pc:"j'ai parlé", de:"Ich habe gesprochen", fr:"J'ai parlé avec Marie."},
-  {inf:"aimer", aux:"avoir", pc:"j'ai aimé", de:"Ich habe gemocht", fr:"J'ai aimé ce livre."},
-  {inf:"chercher", aux:"avoir", pc:"j'ai cherché", de:"Ich habe gesucht", fr:"J'ai cherché mon portable."},
-  {inf:"manger", aux:"avoir", pc:"j'ai mangé", de:"Ich habe gegessen", fr:"J'ai mangé une pizza."},
-  {inf:"travailler", aux:"avoir", pc:"j'ai travaillé", de:"Ich habe gearbeitet", fr:"J'ai travaillé hier soir."},
+  {inf:"avoir", aux:"avoir", pc:"j'ai eu", de:"Ich habe eine gute Note gehabt.", fr:"J'ai eu une bonne note."},
+  {inf:"être", aux:"avoir", pc:"j'ai été", de:"Ich bin gestern krank gewesen.", fr:"J'ai été malade hier."},
+  {inf:"faire", aux:"avoir", pc:"j'ai fait", de:"Ich habe meine Hausaufgaben gemacht.", fr:"J'ai fait mes devoirs."},
+  {inf:"pouvoir", aux:"avoir", pc:"j'ai pu", de:"Ich habe zur Party kommen können.", fr:"J'ai pu venir à la fête."},
+  {inf:"vouloir", aux:"avoir", pc:"j'ai voulu", de:"Ich habe früh weggehen wollen.", fr:"J'ai voulu partir tôt."},
+  {inf:"savoir", aux:"avoir", pc:"j'ai su", de:"Ich habe die Antwort gewusst.", fr:"J'ai su la réponse."},
+  {inf:"voir", aux:"avoir", pc:"j'ai vu", de:"Ich habe gestern einen Film gesehen.", fr:"J'ai vu un film hier."},
+  {inf:"mettre", aux:"avoir", pc:"j'ai mis", de:"Ich habe meinen Mantel angezogen.", fr:"J'ai mis mon manteau."},
+  {inf:"prendre", aux:"avoir", pc:"j'ai pris", de:"Ich habe den Bus genommen.", fr:"J'ai pris le bus."},
+  {inf:"dire", aux:"avoir", pc:"j'ai dit", de:"Ich habe die Wahrheit gesagt.", fr:"J'ai dit la vérité."},
+  {inf:"finir", aux:"avoir", pc:"j'ai fini", de:"Ich habe meine Arbeit beendet.", fr:"J'ai fini mon travail."},
+  {inf:"trouver", aux:"avoir", pc:"j'ai trouvé", de:"Ich habe meine Schlüssel gefunden.", fr:"J'ai trouvé mes clés."},
+  {inf:"écouter", aux:"avoir", pc:"j'ai écouté", de:"Ich habe Musik gehört.", fr:"J'ai écouté de la musique."},
+  {inf:"jouer", aux:"avoir", pc:"j'ai joué", de:"Ich habe Fußball gespielt.", fr:"J'ai joué au football."},
+  {inf:"regarder", aux:"avoir", pc:"j'ai regardé", de:"Ich habe ferngesehen.", fr:"J'ai regardé la télé."},
+  {inf:"parler", aux:"avoir", pc:"j'ai parlé", de:"Ich habe mit Marie gesprochen.", fr:"J'ai parlé avec Marie."},
+  {inf:"aimer", aux:"avoir", pc:"j'ai aimé", de:"Ich habe dieses Buch gemocht.", fr:"J'ai aimé ce livre."},
+  {inf:"chercher", aux:"avoir", pc:"j'ai cherché", de:"Ich habe mein Handy gesucht.", fr:"J'ai cherché mon portable."},
+  {inf:"manger", aux:"avoir", pc:"j'ai mangé", de:"Ich habe eine Pizza gegessen.", fr:"J'ai mangé une pizza."},
+  {inf:"travailler", aux:"avoir", pc:"j'ai travaillé", de:"Ich habe gestern Abend gearbeitet.", fr:"J'ai travaillé hier soir."},
+];
+
+// Personalpronomen für Modus 1
+const pronouns = [
+  {fr: "je", aux_etre: "suis", aux_avoir: "ai", de: "ich"},
+  {fr: "tu", aux_etre: "es", aux_avoir: "as", de: "du"},
+  {fr: "il", aux_etre: "est", aux_avoir: "a", de: "er"},
+  {fr: "elle", aux_etre: "est", aux_avoir: "a", de: "sie"},
+  {fr: "nous", aux_etre: "sommes", aux_avoir: "avons", de: "wir"},
+  {fr: "vous", aux_etre: "êtes", aux_avoir: "avez", de: "ihr/Sie"},
+  {fr: "ils", aux_etre: "sont", aux_avoir: "ont", de: "sie (m)"},
+  {fr: "elles", aux_etre: "sont", aux_avoir: "ont", de: "sie (f)"}
 ];
 
 let current = {};
 let currentMode = 1;
 let isWaitingForCorrection = false;
+let currentPronoun = null;
 
 // Mode-Wechsel
 document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -173,16 +186,17 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
 
 function newQuestion() {
   current = verbs[Math.floor(Math.random() * verbs.length)];
+  currentPronoun = pronouns[Math.floor(Math.random() * pronouns.length)];
   const questionDiv = document.getElementById('question');
   isWaitingForCorrection = false;
   
   if (currentMode === 1) {
-    // Modus 1: Verb auf Französisch mit Personalform (je)
-    questionDiv.innerHTML = `<strong>Infinitiv:</strong> ${current.inf}<br><small>Bilde das Passé Composé mit "je"</small>`;
+    // Modus 1: Verb auf Französisch mit zufälliger Personalform
+    questionDiv.innerHTML = `<strong>Infinitiv:</strong> ${current.inf}<br><small>Bilde das Passé Composé mit "<strong>${currentPronoun.fr}</strong>" (${currentPronoun.de})</small>`;
     document.getElementById('answer').value = "";
   } else {
-    // Modus 2: Deutscher Satz
-    questionDiv.innerHTML = `<strong>Übersetze:</strong><br>"${current.de}"`;
+    // Modus 2: Deutscher Satz (kompletter Satz!)
+    questionDiv.innerHTML = `<strong>Übersetze ins Französische:</strong><br>"${current.de}"`;
     document.getElementById('sentence-answer').value = "";
   }
   
@@ -196,7 +210,7 @@ document.getElementById('check').addEventListener('click', () => {
   const feedback = document.getElementById('feedback');
   
   if (currentMode === 1) {
-    // Modus 1: Verb-Modus - detailliertes Feedback
+    // Modus 1: Verb-Modus - mit verschiedenen Pronomen
     const ans = document.getElementById('answer').value.trim().toLowerCase();
     
     if (!ans) {
@@ -205,14 +219,19 @@ document.getElementById('check').addEventListener('click', () => {
       return;
     }
     
-    if (ans === current.pc.toLowerCase()) {
+    // Erstelle die korrekte Antwort basierend auf Pronomen
+    const auxVerb = current.aux === "être" ? currentPronoun.aux_etre : currentPronoun.aux_avoir;
+    const participle = current.pc.split(' ').pop(); // Partizip aus der je-Form extrahieren
+    const correctAnswer = `${currentPronoun.fr} ${auxVerb} ${participle}`.toLowerCase();
+    
+    if (ans === correctAnswer) {
       res.innerHTML = "<span id='correct'>✅ Richtig! Sehr gut!</span>";
       feedback.classList.add('hidden');
       isWaitingForCorrection = false;
       setTimeout(newQuestion, 2000);
     } else {
       // Detaillierte Fehleranalyse
-      const correctParts = analyzeVerbAnswer(ans, current);
+      const correctParts = analyzeVerbAnswer(ans, current, currentPronoun, correctAnswer);
       
       res.innerHTML = "<span id='wrong'>❌ Noch nicht korrekt!</span>";
       feedback.classList.remove('hidden');
@@ -220,14 +239,14 @@ document.getElementById('check').addEventListener('click', () => {
         <strong>🎓 Sprachlehrer-Feedback:</strong>
         ${correctParts.feedback}
         <br><br>
-        <strong>Richtige Lösung:</strong> <b>${current.pc}</b><br>
+        <strong>Richtige Lösung:</strong> <b>${correctAnswer}</b><br>
         <small><i>Versuche es nochmal mit der richtigen Form, bevor du fortfährst.</i></small>
       `;
       
       isWaitingForCorrection = true;
     }
   } else {
-    // Modus 2: Satz-Modus - detailliertes Feedback
+    // Modus 2: Satz-Modus - kompletter Satz
     const ans = document.getElementById('sentence-answer').value.trim().toLowerCase();
     
     if (!ans) {
@@ -264,40 +283,40 @@ document.getElementById('check').addEventListener('click', () => {
 });
 
 // Hilfsfunktion: Verb-Antwort analysieren
-function analyzeVerbAnswer(userAnswer, verb) {
-  const correct = verb.pc.toLowerCase();
+function analyzeVerbAnswer(userAnswer, verb, pronoun, correctAnswer) {
   const aux = verb.aux;
+  const auxVerb = aux === "être" ? pronoun.aux_etre : pronoun.aux_avoir;
   
   let feedback = '<ul>';
   
+  // Check für Pronomen
+  if (!userAnswer.startsWith(pronoun.fr.toLowerCase())) {
+    feedback += `<li>❌ <strong>Pronomen fehlt oder falsch:</strong> Du solltest mit "${pronoun.fr}" beginnen</li>`;
+  } else {
+    feedback += `<li>✅ Pronomen "${pronoun.fr}" ist korrekt</li>`;
+  }
+  
   // Check für Hilfsverb
   if (aux === "être") {
-    if (!userAnswer.includes("suis")) {
-      feedback += '<li>❌ <strong>Hilfsverb fehlt oder falsch:</strong> Dieses Verb benötigt "être" (je suis)</li>';
+    if (!userAnswer.includes(auxVerb)) {
+      feedback += `<li>❌ <strong>Hilfsverb fehlt oder falsch:</strong> Dieses Verb benötigt "être" → "${pronoun.fr} ${auxVerb}"</li>`;
     } else {
-      feedback += '<li>✅ Hilfsverb "être" ist korrekt</li>';
+      feedback += `<li>✅ Hilfsverb "être" (${auxVerb}) ist korrekt</li>`;
     }
   } else {
-    if (!userAnswer.includes("ai")) {
-      feedback += '<li>❌ <strong>Hilfsverb fehlt oder falsch:</strong> Dieses Verb benötigt "avoir" (j\'ai)</li>';
+    if (!userAnswer.includes(auxVerb)) {
+      feedback += `<li>❌ <strong>Hilfsverb fehlt oder falsch:</strong> Dieses Verb benötigt "avoir" → "${pronoun.fr} ${auxVerb}"</li>`;
     } else {
-      feedback += '<li>✅ Hilfsverb "avoir" ist korrekt</li>';
+      feedback += `<li>✅ Hilfsverb "avoir" (${auxVerb}) ist korrekt</li>`;
     }
   }
   
   // Check für Partizip
-  const participle = correct.split(' ').pop(); // letztes Wort
-  if (!userAnswer.includes(participle.replace(/\(e\)/, ''))) {
+  const participle = verb.pc.split(' ').pop(); // letztes Wort aus je-Form
+  if (!userAnswer.includes(participle.replace(/\(e\)/, '').replace(/\(s\)/, ''))) {
     feedback += `<li>❌ <strong>Partizip fehlt oder falsch:</strong> Das Partizip von "${verb.inf}" ist "${participle}"</li>`;
   } else {
     feedback += '<li>✅ Partizip ist korrekt</li>';
-  }
-  
-  // Check für Pronomen
-  if (!userAnswer.startsWith('j')) {
-    feedback += '<li>❌ <strong>Pronomen fehlt:</strong> Vergiss nicht "je" am Anfang</li>';
-  } else {
-    feedback += '<li>✅ Pronomen "je" ist vorhanden</li>';
   }
   
   feedback += '</ul>';
