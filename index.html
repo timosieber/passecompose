@@ -61,6 +61,29 @@
   #result { margin-top:1rem; font-weight:bold; }
   #correct {color:green;}
   #wrong {color:red;}
+  #feedback {
+    margin-top:1rem;
+    padding:1rem;
+    background:#fff3cd;
+    border-left:4px solid #ffc107;
+    border-radius:0.5rem;
+    text-align:left;
+    font-size:0.9rem;
+  }
+  #feedback ul {
+    margin:0.5rem 0;
+    padding-left:1.5rem;
+  }
+  .next-btn {
+    background:#28a745;
+    color:white;
+    border:none;
+    cursor:pointer;
+    margin-top:0.5rem;
+  }
+  .next-btn:hover {
+    background:#218838;
+  }
 </style>
 </head>
 <body>
@@ -85,6 +108,7 @@
     
     <button id="check">Überprüfen</button>
     <div id="result"></div>
+    <div id="feedback" class="hidden"></div>
   </div>
 
 <script>
@@ -125,6 +149,7 @@ const verbs = [
 
 let current = {};
 let currentMode = 1;
+let isWaitingForCorrection = false;
 
 // Mode-Wechsel
 document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -141,6 +166,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
       document.getElementById('mode2-inputs').classList.remove('hidden');
     }
     
+    isWaitingForCorrection = false;
     newQuestion();
   });
 });
@@ -148,6 +174,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
 function newQuestion() {
   current = verbs[Math.floor(Math.random() * verbs.length)];
   const questionDiv = document.getElementById('question');
+  isWaitingForCorrection = false;
   
   if (currentMode === 1) {
     // Modus 1: Verb auf Französisch mit Personalform (je)
@@ -160,49 +187,162 @@ function newQuestion() {
   }
   
   document.getElementById('result').innerText = "";
+  document.getElementById('feedback').classList.add('hidden');
+  document.getElementById('feedback').innerHTML = "";
 }
 
 document.getElementById('check').addEventListener('click', () => {
   const res = document.getElementById('result');
+  const feedback = document.getElementById('feedback');
   
   if (currentMode === 1) {
-    // Modus 1: Verb-Modus - nur Passé Composé eingeben
+    // Modus 1: Verb-Modus - detailliertes Feedback
     const ans = document.getElementById('answer').value.trim().toLowerCase();
     
     if (!ans) {
       res.innerHTML = "<span id='wrong'>Bitte eine Antwort eingeben!</span>";
+      feedback.classList.add('hidden');
       return;
     }
     
     if (ans === current.pc.toLowerCase()) {
-      res.innerHTML = "<span id='correct'>✅ Richtig!</span>";
+      res.innerHTML = "<span id='correct'>✅ Richtig! Sehr gut!</span>";
+      feedback.classList.add('hidden');
+      isWaitingForCorrection = false;
+      setTimeout(newQuestion, 2000);
     } else {
-      res.innerHTML = `<span id='wrong'>❌ Falsch!</span><br>
-      Richtige Lösung: <b>${current.pc}</b>`;
+      // Detaillierte Fehleranalyse
+      const correctParts = analyzeVerbAnswer(ans, current);
+      
+      res.innerHTML = "<span id='wrong'>❌ Noch nicht korrekt!</span>";
+      feedback.classList.remove('hidden');
+      feedback.innerHTML = `
+        <strong>🎓 Sprachlehrer-Feedback:</strong>
+        ${correctParts.feedback}
+        <br><br>
+        <strong>Richtige Lösung:</strong> <b>${current.pc}</b><br>
+        <small><i>Versuche es nochmal mit der richtigen Form, bevor du fortfährst.</i></small>
+      `;
+      
+      isWaitingForCorrection = true;
     }
   } else {
-    // Modus 2: Satz-Modus
+    // Modus 2: Satz-Modus - detailliertes Feedback
     const ans = document.getElementById('sentence-answer').value.trim().toLowerCase();
     
     if (!ans) {
       res.innerHTML = "<span id='wrong'>Bitte einen Satz eingeben!</span>";
+      feedback.classList.add('hidden');
       return;
     }
     
-    // Normalisierte Antwort (ohne Großbuchstaben, Punkt akzeptieren)
     const correctAnswer = current.fr.toLowerCase().replace(/\.$/, '');
     const userAnswer = ans.replace(/\.$/, '');
     
     if (userAnswer === correctAnswer) {
-      res.innerHTML = "<span id='correct'>✅ Richtig!</span>";
+      res.innerHTML = "<span id='correct'>✅ Richtig! Perfekt übersetzt!</span>";
+      feedback.classList.add('hidden');
+      isWaitingForCorrection = false;
+      setTimeout(newQuestion, 2000);
     } else {
-      res.innerHTML = `<span id='wrong'>❌ Falsch!</span><br>
-      Richtige Lösung: <b>${current.fr}</b>`;
+      // Detaillierte Fehleranalyse für Sätze
+      const sentenceFeedback = analyzeSentenceAnswer(userAnswer, current);
+      
+      res.innerHTML = "<span id='wrong'>❌ Noch nicht korrekt!</span>";
+      feedback.classList.remove('hidden');
+      feedback.innerHTML = `
+        <strong>🎓 Sprachlehrer-Feedback:</strong>
+        ${sentenceFeedback}
+        <br><br>
+        <strong>Richtige Lösung:</strong> <b>${current.fr}</b><br>
+        <small><i>Versuche es nochmal mit der richtigen Übersetzung.</i></small>
+      `;
+      
+      isWaitingForCorrection = true;
+    }
+  }
+});
+
+// Hilfsfunktion: Verb-Antwort analysieren
+function analyzeVerbAnswer(userAnswer, verb) {
+  const correct = verb.pc.toLowerCase();
+  const aux = verb.aux;
+  
+  let feedback = '<ul>';
+  
+  // Check für Hilfsverb
+  if (aux === "être") {
+    if (!userAnswer.includes("suis")) {
+      feedback += '<li>❌ <strong>Hilfsverb fehlt oder falsch:</strong> Dieses Verb benötigt "être" (je suis)</li>';
+    } else {
+      feedback += '<li>✅ Hilfsverb "être" ist korrekt</li>';
+    }
+  } else {
+    if (!userAnswer.includes("ai")) {
+      feedback += '<li>❌ <strong>Hilfsverb fehlt oder falsch:</strong> Dieses Verb benötigt "avoir" (j\'ai)</li>';
+    } else {
+      feedback += '<li>✅ Hilfsverb "avoir" ist korrekt</li>';
     }
   }
   
-  setTimeout(newQuestion, 3000);
-});
+  // Check für Partizip
+  const participle = correct.split(' ').pop(); // letztes Wort
+  if (!userAnswer.includes(participle.replace(/\(e\)/, ''))) {
+    feedback += `<li>❌ <strong>Partizip fehlt oder falsch:</strong> Das Partizip von "${verb.inf}" ist "${participle}"</li>`;
+  } else {
+    feedback += '<li>✅ Partizip ist korrekt</li>';
+  }
+  
+  // Check für Pronomen
+  if (!userAnswer.startsWith('j')) {
+    feedback += '<li>❌ <strong>Pronomen fehlt:</strong> Vergiss nicht "je" am Anfang</li>';
+  } else {
+    feedback += '<li>✅ Pronomen "je" ist vorhanden</li>';
+  }
+  
+  feedback += '</ul>';
+  
+  return { feedback };
+}
+
+// Hilfsfunktion: Satz-Antwort analysieren
+function analyzeSentenceAnswer(userAnswer, verb) {
+  const correct = verb.fr.toLowerCase().replace(/\.$/, '');
+  const words = correct.split(' ');
+  
+  let feedback = '<ul>';
+  let foundIssues = false;
+  
+  // Check für Pronomen
+  if (!userAnswer.startsWith('j')) {
+    feedback += '<li>❌ <strong>Pronomen fehlt:</strong> Der Satz sollte mit "je" oder "j\'" beginnen</li>';
+    foundIssues = true;
+  }
+  
+  // Check für Hilfsverb
+  if (verb.aux === "être" && !userAnswer.includes("suis")) {
+    feedback += '<li>❌ <strong>Hilfsverb:</strong> Dieses Verb braucht "être" → "je suis"</li>';
+    foundIssues = true;
+  } else if (verb.aux === "avoir" && !userAnswer.includes("ai")) {
+    feedback += '<li>❌ <strong>Hilfsverb:</strong> Dieses Verb braucht "avoir" → "j\'ai"</li>';
+    foundIssues = true;
+  }
+  
+  // Check für wichtige Wörter
+  const missingWords = words.filter(w => w.length > 2 && !userAnswer.includes(w));
+  if (missingWords.length > 0) {
+    feedback += `<li>❌ <strong>Fehlende Wörter:</strong> ${missingWords.join(', ')}</li>`;
+    foundIssues = true;
+  }
+  
+  if (!foundIssues) {
+    feedback += '<li>⚠️ Die Struktur ist fast richtig, aber prüfe nochmal Rechtschreibung und Grammatik</li>';
+  }
+  
+  feedback += '</ul>';
+  
+  return feedback;
+}
 
 newQuestion();
 </script>
